@@ -6,21 +6,28 @@ import { questions } from "./lib/db";
 
 export default function Home(){
   const [index, setIndex] = useState(0);
+  const [ans, setAns] = useState("");
   const [feedback, setFeedback] = useState<string>("");
+  const [hasAnswered, setHasAnswered] = useState(false);
 
   const nextQue =()=>{
         if(index<questions.length-1){
             setIndex(index+1);
             setFeedback("");
+            setHasAnswered(false);
         }
     }
 
   const checkAnswer = (selectedOption: string) => {
+        if(hasAnswered){
+          return;
+        }
         if (selectedOption === questions[index].answer) {
             setFeedback("Correct! 🎉");
         } else {
             setFeedback(`Wrong! The correct answer is: ${questions[index].answer}`);
         }
+        setHasAnswered(true);
     };
 
   return (
@@ -29,12 +36,15 @@ export default function Home(){
       question = {questions[index].question}
       />
       {questions[index].options.map((option, index) => (
-                    <button key={index} onClick={() => checkAnswer(option)}>
+                    <button key={index} onClick={() => setAns(option)}>
                         {option}
                     </button>
                 ))}
       <p>{feedback}</p>
-      <button onClick={()=>nextQue()}>Next</button>
+      <div>
+        <button onClick={()=>checkAnswer(ans)}>Check for review</button>
+        <button onClick={()=>nextQue()}>Next</button>
+      </div>
     </div>
   )
 }
