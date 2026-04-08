@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cards from "./components/cards";
 import { questions } from "./lib/db";
 
@@ -10,12 +10,14 @@ export default function Home(){
   const [feedback, setFeedback] = useState<string>("");
   const [hasAnswered, setHasAnswered] = useState(false);
   const [score, setScore] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(60);
 
   const nextQue =()=>{
         if(index<questions.length-1){
             setIndex(index+1);
             setFeedback("");
             setHasAnswered(false);
+            setTimeLeft(60);
         }
     }
 
@@ -32,9 +34,24 @@ export default function Home(){
         setHasAnswered(true);
     };
 
+  useEffect (()=>{
+    if(timeLeft === 0 || hasAnswered){
+      if(timeLeft === 0 && !hasAnswered){
+        setHasAnswered(true);
+        setFeedback("Times up!");
+      }
+      return;
+    }
+    const timer = setInterval(() => {
+      setTimeLeft((prev)=>prev -1)
+    }, 1000);
+    return ()=> clearInterval(timer);
+  },[timeLeft, hasAnswered]);
+
   return (
     <div>
       <p>Your Score: {score}/10</p>
+      <p>Time left: {timeLeft}</p>
       <Cards
       question = {questions[index].question}
       />
