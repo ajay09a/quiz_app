@@ -9,6 +9,7 @@ export default function Home(){
   const [ans, setAns] = useState("");
   const [feedback, setFeedback] = useState<string>("");
   const [hasAnswered, setHasAnswered] = useState(false);
+  const [score, setScore] = useState(0);
 
   const nextQue =()=>{
         if(index<questions.length-1){
@@ -24,6 +25,7 @@ export default function Home(){
         }
         if (selectedOption === questions[index].answer) {
             setFeedback("Correct! 🎉");
+            setScore(score + 1);
         } else {
             setFeedback(`Wrong! The correct answer is: ${questions[index].answer}`);
         }
@@ -32,6 +34,7 @@ export default function Home(){
 
   return (
     <div>
+      <p>Your Score: {score}/10</p>
       <Cards
       question = {questions[index].question}
       />
