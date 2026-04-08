@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Cards from "./components/cards";
 import { questions } from "./lib/db";
+import "./globals.css";
 
 export default function Home(){
   const [index, setIndex] = useState(0);
@@ -49,22 +50,27 @@ export default function Home(){
   },[timeLeft, hasAnswered]);
 
   return (
-    <div>
-      <p>Your Score: {score}/10</p>
-      <p>Time left: {timeLeft}</p>
+    <main>
+      <div className="header">
+        <p className="scorecard">Your Score: <b>{score}/10</b></p>
+        <p className="timer">Time left: <b>{timeLeft}</b></p>
+      </div>
       <Cards
       question = {questions[index].question}
+      index = {index}
       />
-      {questions[index].options.map((option, index) => (
-                    <button key={index} onClick={() => setAns(option)}>
-                        {option}
-                    </button>
-                ))}
-      <p>{feedback}</p>
-      <div>
-        <button onClick={()=>checkAnswer(ans)}>Check for review</button>
-        <button onClick={()=>nextQue()}>Next</button>
+      <div className="options">
+        {questions[index].options.map((option, index) => (
+                      <button key={index} onClick={() => setAns(option)}>
+                          {index+1}.  {option}
+                      </button>
+                  ))}
       </div>
-    </div>
+      <p className="feedback">{feedback}</p>
+      <div className="footer-button">
+        <button className="checkAns" onClick={()=>checkAnswer(ans)}>Check for review</button>
+        <button className="nextQue" onClick={()=>nextQue()}>Next</button>
+      </div>
+    </main>
   )
 }

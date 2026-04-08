@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
 
-export default function Cards({ question}: any) {
+export default function Cards({ question, index}: any) {
     return (
         <div>
-            <h2>{question}</h2>
+            <h2>Q{index+1}:   {question}</h2>
         </div>
     );
 }
